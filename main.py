@@ -135,7 +135,7 @@ def train(model, device, train_loader, optimizer, epoch, scaler, args):
     total = 0
     correct = 0
     s_time = time.time()
-    progress_bar = tqdm(train_loader, desc='Epoch {}/{}'.format(i, len(train_loader)), leave=False)
+    progress_bar = tqdm(train_loader, desc='Epoch {}/{}'.format(epoch, 0), leave=False)
     for i, (images, labels) in enumerate(progress_bar):
         optimizer.zero_grad()
         labels = labels.to(device)
