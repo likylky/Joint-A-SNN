@@ -12,6 +12,7 @@ from functions import seed_all
 import torchvision.transforms as transforms
 from torchvision.datasets import CIFAR10, CIFAR100
 from functions.autoaug import CIFAR10Policy, Cutout
+from tqdm import tqdm
 
 
 parser = argparse.ArgumentParser(description='PyTorch Joint Training of ANN and SNN')
@@ -134,7 +135,8 @@ def train(model, device, train_loader, optimizer, epoch, scaler, args):
     total = 0
     correct = 0
     s_time = time.time()
-    for i, (images, labels) in enumerate(train_loader):
+    progress_bar = tqdm(train_loader, desc='Epoch {}/{}'.format(epoch+1, args.num_epochs), leave=False)
+    for i, (images, labels) in enumerate(progress_bar):
         optimizer.zero_grad()
         labels = labels.to(device)
         images = images.to(device)
@@ -153,7 +155,11 @@ def train(model, device, train_loader, optimizer, epoch, scaler, args):
 
         running_loss += loss.item()
         total += float(labels.size(0))
-
+      
+        # 更新进度条的状态
+        progress_bar.set_postfix(loss=running_loss / total, acc=100 * correct / total)
+    progress_bar.close()
+  
     e_time = time.time()
     return running_loss / total, 100 * correct / total, (e_time-s_time)/60
 
