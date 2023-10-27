@@ -36,7 +36,7 @@ parser.add_argument('--amp', action='store_false',
 args = parser.parse_args()
 
 
-def build_cifar(use_cifar10=True, download=False, normalize=True):
+def build_cifar(use_cifar10=True, download=True, normalize=True):
     aug = [transforms.RandomCrop(32, padding=4),
            transforms.RandomHorizontalFlip(),
            CIFAR10Policy(),
